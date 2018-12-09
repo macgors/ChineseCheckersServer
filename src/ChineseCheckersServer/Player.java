@@ -17,7 +17,6 @@ public class Player extends Thread {
         this.color = color;
     }
 
-
     public Player(Socket socket) {
         this.socket = socket;
         try {
@@ -27,6 +26,9 @@ public class Player extends Thread {
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
+    }
+    public void run(){
+
     }
 
 }
