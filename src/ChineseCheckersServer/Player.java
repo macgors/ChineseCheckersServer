@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 public class Player extends Thread {
     Color color;
@@ -22,14 +23,17 @@ public class Player extends Thread {
         if (a == 5) this.color = Color.DARKMAGENTA;
     }
 
-    public Player(Socket socket, int PlayerNumber) {
+    public Player(Socket socket, int PlayerNumber, int numberOfplayers) {
         this.socket = socket;
         setColor(PlayerNumber);
 
         try {
 
             output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + this.color);
+            output.println("WELCOME");
+            output.println("COLOR " + this.color);
+            output.println("NUMBER_OF_PLAYERS " + numberOfplayers);
+
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
@@ -37,7 +41,7 @@ public class Player extends Thread {
 
     public void run() {
         try {
-            output.println("MESSAGE All players connected.");
+            output.println("START");
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             while (true) {

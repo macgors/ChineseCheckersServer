@@ -32,7 +32,7 @@ public class Server {
         players = new Player[numOfPlayers];
         for (int i = 0; i < numOfPlayers; i++) {
             System.out.println("waiting for " + i + " player");
-            players[i] = new Player(listener.accept(),i);
+            players[i] = new Player(listener.accept(),i, numOfPlayers);
             numOfPlayersConnected++;
         }
         for (int i = 0; i < numOfPlayers; i++) {

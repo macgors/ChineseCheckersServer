@@ -18,7 +18,7 @@ public class Board{
 
     public Board(int totalNumberOfPlayers) {
         try {
-            if(totalNumberOfPlayers<2 || totalNumberOfPlayers==5 || totalNumberOfPlayers>6) throw new WrongNumberArgsException("Invalid Bumber of players");
+            if(totalNumberOfPlayers<2 || totalNumberOfPlayers==5 || totalNumberOfPlayers>6) throw new WrongNumberArgsException("Invalid number of players");
 
             // Create a 6-Star Board
             for (int x = 0; x < 13; x++) {
