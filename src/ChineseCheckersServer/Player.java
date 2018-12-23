@@ -1,6 +1,8 @@
 package ChineseCheckersServer;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,6 +15,7 @@ public class Player extends Thread {
     Socket socket;
     BufferedReader input;
     PrintWriter output;
+    int PlayerNumber;
 
     public void setColor(int a) {
         if (a == 0) this.color = Color.GREEN;
@@ -26,6 +29,7 @@ public class Player extends Thread {
     public Player(Socket socket, int PlayerNumber, int numberOfplayers) {
         this.socket = socket;
         setColor(PlayerNumber);
+        this.PlayerNumber=PlayerNumber;
 
         try {
 
@@ -33,6 +37,12 @@ public class Player extends Thread {
             output.println("WELCOME");
             output.println("COLOR " + this.color);
             output.println("NUMBER_OF_PLAYERS " + numberOfplayers);
+            output.println("PLAYER_NUMBER " + PlayerNumber);
+            for (PrintWriter writer : Server.writers) {
+                writer.println("TURN "+ Server.whoseTurn);
+            }
+
+            Server.writers.add(output);
 
         } catch (IOException e) {
             System.out.println("Player died: " + e);
@@ -44,18 +54,42 @@ public class Player extends Thread {
             output.println("START");
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+
             while (true) {
                 String command = input.readLine();
+                System.out.println(command);
                 if (command.startsWith("MOVE")) {
-                    int fromX = command.charAt(6);
-                    int fromY = command.charAt(8);
-                    int targetX = command.charAt(10);
-                    int targetY = command.charAt(11);
+                    String[] parts = command.split(" ");
+                    int targetX = Integer.parseInt(parts[1]);
+                    int targetY = Integer.parseInt(parts[2]);
+                    int fromX = Integer.parseInt(parts[3]);
+                    int fromY = Integer.parseInt(parts[4]);
+                    Paint moverColor =Color.valueOf(parts[5]);
 
-                } else if (command.startsWith("QUIT")) {
+                    if(Game.board.movePossible(targetX,targetY,fromX,fromY,moverColor)) {
+                        Game.board.move(targetX, targetY, fromX, fromY, moverColor);
+                        for (PrintWriter writer : Server.writers) {
+                            writer.println("MOVE " + targetX + " " + targetY + " " + fromX + " " + fromY);
+                        }
+                    }
+                    else if(Game.board.jumpPossible(targetX,targetY,fromX,fromY,moverColor)){
+                        Game.board.jump(targetX,targetY,fromX,fromY,moverColor);
+                        for (PrintWriter writer : Server.writers) {
+                            writer.println("MOVE "+ targetX + " " + targetY + " " + fromX+ " " + fromY);
+                        }
+
+                    }
+
+                }
+                else if (command.startsWith("QUIT")) {
                     return;
                 }
                 else if (command.startsWith("TURN")) {
+                    Server.whoseTurn= (Server.whoseTurn+1)%4;
+                    for (PrintWriter writer : Server.writers) {
+                        writer.println("TURN "+ Server.whoseTurn);
+                    }
+
 
                 }
             }

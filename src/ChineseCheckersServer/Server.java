@@ -16,9 +16,12 @@ public class Server {
     private static final int PORT = 9001;
     boolean inPlay=false;
     int numOfPlayers;
-    Player players[];
+    public static int whoseTurn=0;
     int numOfPlayersConnected = 0;
     private ServerSocket listener;
+    static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    Game game;
+
 
 
     void settings() {
@@ -29,14 +32,14 @@ public class Server {
     }
 
     private void setPlayers() throws IOException {
-        players = new Player[numOfPlayers];
+        Game.players = new Player[numOfPlayers];
         for (int i = 0; i < numOfPlayers; i++) {
             System.out.println("waiting for " + i + " player");
-            players[i] = new Player(listener.accept(),i, numOfPlayers);
+            Game.players[i] = new Player(listener.accept(),i, numOfPlayers);
             numOfPlayersConnected++;
         }
         for (int i = 0; i < numOfPlayers; i++) {
-            players[i].start();
+            Game.players[i].start();
         }
         System.out.println("All players connected.");
     }

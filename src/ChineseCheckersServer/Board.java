@@ -236,7 +236,7 @@ public class Board{
     //self explanatory
     void move(int hereGoX, int hereGoY, int goingFromX, int goingFromY, Paint player_color){
         try{
-            if(movePossible(hereGoX, hereGoY, goingFromX, goingFromY)){
+            if(movePossible(hereGoX, hereGoY, goingFromX, goingFromY,player_color)){
                 board[hereGoX][hereGoY].setFill(player_color);
                 board[goingFromX][goingFromY].setColor(Color.GRAY);
                 System.out.println("MOVE");
@@ -253,7 +253,7 @@ public class Board{
 
     void jump(int hereGoX, int hereGoY, int goingFromX, int goingFromY, Paint player_color){
         try{
-            if(jumpPossible(hereGoX, hereGoY, goingFromX, goingFromY)){
+            if(jumpPossible(hereGoX, hereGoY, goingFromX, goingFromY,player_color)){
                 board[hereGoX][hereGoY].setFill(player_color);
                 board[goingFromX][goingFromY].setColor(Color.GRAY);
                 System.out.println("JUMP");
@@ -268,7 +268,7 @@ public class Board{
         }
     }
 
-    boolean jumpPossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY){
+    boolean jumpPossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY,Paint PlayerColor){
 
         /* There are 8 direction from which a marble can jump over a marble
            Imagine that we have a clock and we jump from number to the other side
@@ -281,6 +281,8 @@ public class Board{
            from the beginning again. Hopefully the alghoritm for board will fix this problem and
            we can adjust accordingly.
         */
+        if(!PlayerColor.equals(board[goingFromX][goingFromY].getFill()))
+            return false;
 
         if(goingFromX - hereGoX  == 2)
             if(goingFromY - hereGoY == 0)
@@ -327,12 +329,13 @@ public class Board{
 
         return false;
     }
-    boolean movePossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY){
+     boolean movePossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY,Paint PlayerColor){
         if(goingFromX == hereGoX+1 || goingFromX == hereGoX-1 || goingFromX==hereGoX) //must be close
             if(goingFromY == hereGoY+1 || goingFromY == hereGoY-1 || goingFromY == hereGoY)
                 if(Color.GRAY.equals(board[hereGoX][hereGoY].getFill())) // target must be gray
                     if(!(goingFromX<hereGoX && goingFromY!=hereGoY && goingFromY%2==0))
                         if(!(goingFromX>hereGoX && goingFromY!=hereGoY && goingFromY%2==1))
+                            if(PlayerColor.equals(board[goingFromX][goingFromY].getFill()))
                             return true;
         return false;
     }
