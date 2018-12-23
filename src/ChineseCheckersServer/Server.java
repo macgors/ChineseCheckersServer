@@ -53,7 +53,8 @@ public class Server {
                     setPlayers();
                 }
             }
-        } finally {
+        }
+        finally {
             listener.close();
         }
     }

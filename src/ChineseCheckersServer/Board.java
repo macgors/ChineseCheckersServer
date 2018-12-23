@@ -4,6 +4,8 @@ import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.io.PrintWriter;
+
 public class Board{
     private boolean marbleSelected=false;
     private int selectedMarbleX;
@@ -340,6 +342,96 @@ public class Board{
         return false;
     }
 
+    public void winCondition(){
+        Color winner=Color.GRAY;
+        if(
+                Color.GREEN.equals(board[4][13].getFill()) &&
+                        Color.GREEN.equals(board[5][13].getFill()) &&
+                        Color.GREEN.equals(board[6][13].getFill()) &&
+                        Color.GREEN.equals(board[7][13].getFill()) &&
+                        Color.GREEN.equals(board[7][14].getFill()) &&
+                        Color.GREEN.equals(board[5][14].getFill()) &&
+                        Color.GREEN.equals(board[6][14].getFill()) &&
+                        Color.GREEN.equals(board[5][15].getFill()) &&
+                        Color.GREEN.equals(board[6][15].getFill()) &&
+                        Color.GREEN.equals(board[6][16].getFill())
+        )
+            winner=Color.GREEN;
+        if(
+                Color.RED.equals(board[6][0].getFill()) &&
+                        Color.RED.equals(board[5][1].getFill()) &&
+                        Color.RED.equals(board[6][1].getFill()) &&
+                        Color.RED.equals(board[5][2].getFill()) &&
+                        Color.RED.equals(board[6][2].getFill()) &&
+                        Color.RED.equals(board[7][2].getFill()) &&
+                        Color.RED.equals(board[4][3].getFill()) &&
+                        Color.RED.equals(board[5][3].getFill()) &&
+                        Color.RED.equals(board[6][3].getFill()) &&
+                        Color.RED.equals(board[7][3].getFill())
+        )
+            winner= Color.RED;
+
+        if(
+                Color.YELLOW.equals(board[10][9].getFill()) &&
+                        Color.YELLOW.equals(board[10][10].getFill()) &&
+                        Color.YELLOW.equals(board[11][10].getFill()) &&
+                        Color.YELLOW.equals(board[9][11].getFill()) &&
+                        Color.YELLOW.equals(board[10][11].getFill()) &&
+                        Color.YELLOW.equals(board[11][11].getFill()) &&
+                        Color.YELLOW.equals(board[9][12].getFill()) &&
+                        Color.YELLOW.equals(board[10][12].getFill()) &&
+                        Color.YELLOW.equals(board[11][12].getFill()) &&
+                        Color.YELLOW.equals(board[12][12].getFill())
+        )
+            winner= Color.YELLOW;
+
+        if(
+                Color.BLUE.equals(board[0][4].getFill()) &&
+                        Color.BLUE.equals(board[1][4].getFill()) &&
+                        Color.BLUE.equals(board[2][4].getFill()) &&
+                        Color.BLUE.equals(board[3][4].getFill()) &&
+                        Color.BLUE.equals(board[0][5].getFill()) &&
+                        Color.BLUE.equals(board[1][5].getFill()) &&
+                        Color.BLUE.equals(board[2][5].getFill()) &&
+                        Color.BLUE.equals(board[1][6].getFill()) &&
+                        Color.BLUE.equals(board[2][6].getFill()) &&
+                        Color.BLUE.equals(board[1][7].getFill())
+        )
+            winner= Color.BLUE;
+        if(
+                Color.PINK.equals(board[0][12].getFill()) &&
+                        Color.PINK.equals(board[1][12].getFill()) &&
+                        Color.PINK.equals(board[2][12].getFill()) &&
+                        Color.PINK.equals(board[3][12].getFill()) &&
+                        Color.PINK.equals(board[0][11].getFill()) &&
+                        Color.PINK.equals(board[1][11].getFill()) &&
+                        Color.PINK.equals(board[2][11].getFill()) &&
+                        Color.PINK.equals(board[1][10].getFill()) &&
+                        Color.PINK.equals(board[2][10].getFill()) &&
+                        Color.PINK.equals(board[1][9].getFill())
+        )
+            winner=  Color.PINK;
+
+        if(
+                Color.DARKMAGENTA.equals(board[10][7].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[10][6].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[11][6].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[9][5].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[10][5].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[11][5].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[9][4].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[10][4].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[11][4].getFill()) &&
+                        Color.DARKMAGENTA.equals(board[12][4].getFill())
+        )
+            winner= Color.DARKMAGENTA;
+
+        if(!winner.equals(Color.GRAY)){
+            for (PrintWriter writer : Server.writers) {
+                writer.println("WINNER " + winner);
+            }
+        }
+    }
 
 
 

@@ -79,6 +79,7 @@ public class Player extends Thread {
                         }
 
                     }
+                    Game.board.winCondition();
 
                 }
                 else if (command.startsWith("QUIT")) {
