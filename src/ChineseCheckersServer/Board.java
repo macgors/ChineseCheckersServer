@@ -244,7 +244,7 @@ public class Board{
                 System.out.println("MOVE");
             }
             else{
-                System.out.println("Illegal Move, Trying Jump"); //debażer
+                System.out.println("Illegal Move"); //debażer
 
             }
         }
@@ -255,7 +255,7 @@ public class Board{
 
     void jump(int hereGoX, int hereGoY, int goingFromX, int goingFromY, Paint player_color){
         try{
-            if(jumpPossible(hereGoX, hereGoY, goingFromX, goingFromY,player_color)){
+            if(jumpPossible(hereGoX, hereGoY, goingFromX, goingFromY)){
                 board[hereGoX][hereGoY].setFill(player_color);
                 board[goingFromX][goingFromY].setColor(Color.GRAY);
                 System.out.println("JUMP");
@@ -270,9 +270,9 @@ public class Board{
         }
     }
 
-    boolean jumpPossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY,Paint PlayerColor){
+    boolean jumpPossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY) {
 
-        /* There are 8 direction from which a marble can jump over a marble
+        /* (J) There are 8 direction from which a marble can jump over a marble
            Imagine that we have a clock and we jump from number to the other side
            Over the middle in the clock: like from 3 to 9 or from 12 to 6 etc.
 
@@ -283,62 +283,64 @@ public class Board{
            from the beginning again. Hopefully the alghoritm for board will fix this problem and
            we can adjust accordingly.
         */
-        if(!PlayerColor.equals(board[goingFromX][goingFromY].getFill()))
-            return false;
 
-        if(goingFromX - hereGoX  == 2)
-            if(goingFromY - hereGoY == 0)
-                if(!(Color.GRAY.equals(board[hereGoX+1][hereGoY].getFill())))
+
+        if (goingFromX - hereGoX == 2)
+            if (goingFromY - hereGoY == 0)
+                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY].getFill())))
                     return true;
 
-        if(goingFromX - hereGoX == -2)
-            if(goingFromY - hereGoY == 0)
-                if(!(Color.GRAY.equals(board[hereGoX-1][hereGoY].getFill())))
+        if (goingFromX - hereGoX == -2)
+            if (goingFromY - hereGoY == 0)
+                if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY].getFill())))
                     return true;
 
-        // curvature of the board forces to make two checks
+        // (J) curvature of the board forces to make two checks
         // cause could be placed on even or odd spot
 
-        if(hereGoX - goingFromX == -1)
-            if(hereGoY - goingFromY == 2)
-                if(!(Color.GRAY.equals(board[hereGoX+1][hereGoY-1].getFill()))){
+        if (hereGoX - goingFromX == -1)
+            if (hereGoY - goingFromY == 2)
+                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY - 1].getFill()))) {
                     return true;
-                }else if (!(Color.GRAY.equals(board[hereGoX][hereGoY-1].getFill())))
-                    return true;
-
-        if(hereGoX - goingFromX == -1)
-            if(hereGoY - goingFromY == -2)
-                if(!(Color.GRAY.equals(board[hereGoX+1][hereGoY+1].getFill()))){
-                    return true;
-                }else if (!(Color.GRAY.equals(board[hereGoX][hereGoY+1].getFill())))
+                } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill())))
                     return true;
 
-        if(hereGoX - goingFromX  == 1)
-            if(hereGoY - goingFromY == 2)
-                if(!(Color.GRAY.equals(board[hereGoX][hereGoY-1].getFill()))) {
+        if (hereGoX - goingFromX == -1)
+            if (hereGoY - goingFromY == -2)
+                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY + 1].getFill()))) {
                     return true;
-                }else if (!(Color.GRAY.equals(board[hereGoX-1][hereGoY-1].getFill())))
-                    return true;
-
-        if(hereGoX - goingFromX  == 1)
-            if(hereGoY - goingFromY == -2)
-                if(!(Color.GRAY.equals(board[hereGoX][hereGoY+1].getFill()))) {
-                    return true;
-                }else if (!(Color.GRAY.equals(board[hereGoX-1][hereGoY+1].getFill())))
+                } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill())))
                     return true;
 
+        if (hereGoX - goingFromX == 1)
+            if (hereGoY - goingFromY == 2)
+                if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill()))) {
+                    return true;
+                } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY - 1].getFill())))
+                    return true;
 
+        if (hereGoX - goingFromX == 1)
+            if (hereGoY - goingFromY == -2)
+                if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill()))) {
+                    return true;
+                } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY + 1].getFill())))
+                    return true;
 
         return false;
     }
+
      boolean movePossible(int hereGoX, int hereGoY, int goingFromX, int goingFromY,Paint PlayerColor){
         if(goingFromX == hereGoX+1 || goingFromX == hereGoX-1 || goingFromX==hereGoX) //must be close
             if(goingFromY == hereGoY+1 || goingFromY == hereGoY-1 || goingFromY == hereGoY)
                 if(Color.GRAY.equals(board[hereGoX][hereGoY].getFill())) // target must be gray
                     if(!(goingFromX<hereGoX && goingFromY!=hereGoY && goingFromY%2==0))
                         if(!(goingFromX>hereGoX && goingFromY!=hereGoY && goingFromY%2==1))
-                            if(PlayerColor.equals(board[goingFromX][goingFromY].getFill()))
-                            return true;
+                            if(PlayerColor.equals(board[goingFromX][goingFromY].getFill())) {
+                                return true;
+                            }
+
+
+        System.out.println("illegal move checked");
         return false;
     }
 

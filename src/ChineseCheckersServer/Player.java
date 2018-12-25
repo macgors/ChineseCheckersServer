@@ -16,6 +16,7 @@ public class Player extends Thread {
     BufferedReader input;
     PrintWriter output;
     int PlayerNumber;
+    int numberOfPlayers;
 
     public void setColor(int a) {
         if (a == 0) this.color = Color.GREEN;
@@ -26,17 +27,18 @@ public class Player extends Thread {
         if (a == 5) this.color = Color.DARKMAGENTA;
     }
 
-    public Player(Socket socket, int PlayerNumber, int numberOfplayers) {
+    public Player(Socket socket, int PlayerNumber, int numberOfplayers1) {
         this.socket = socket;
         setColor(PlayerNumber);
         this.PlayerNumber=PlayerNumber;
+        this.numberOfPlayers=numberOfplayers1;
 
         try {
 
             output = new PrintWriter(socket.getOutputStream(), true);
             output.println("WELCOME");
             output.println("COLOR " + this.color);
-            output.println("NUMBER_OF_PLAYERS " + numberOfplayers);
+            output.println("NUMBER_OF_PLAYERS " + numberOfPlayers);
             output.println("PLAYER_NUMBER " + PlayerNumber);
             for (PrintWriter writer : Server.writers) {
                 writer.println("TURN "+ Server.whoseTurn);
@@ -64,7 +66,7 @@ public class Player extends Thread {
                     int targetY = Integer.parseInt(parts[2]);
                     int fromX = Integer.parseInt(parts[3]);
                     int fromY = Integer.parseInt(parts[4]);
-                    Paint moverColor =Color.valueOf(parts[5]);
+                    Paint moverColor = Color.valueOf(parts[5]);
 
                     if(Game.board.movePossible(targetX,targetY,fromX,fromY,moverColor)) {
                         Game.board.move(targetX, targetY, fromX, fromY, moverColor);
@@ -72,21 +74,21 @@ public class Player extends Thread {
                             writer.println("MOVE " + targetX + " " + targetY + " " + fromX + " " + fromY);
                         }
                     }
-                    else if(Game.board.jumpPossible(targetX,targetY,fromX,fromY,moverColor)){
+                    else if(Game.board.jumpPossible(targetX,targetY,fromX,fromY)){
                         Game.board.jump(targetX,targetY,fromX,fromY,moverColor);
                         for (PrintWriter writer : Server.writers) {
                             writer.println("MOVE "+ targetX + " " + targetY + " " + fromX+ " " + fromY);
                         }
 
                     }
-                    Game.board.winCondition();
+                    Game.board.winCondition(); //this both checks if there's a winner and informs player if there is one
 
                 }
                 else if (command.startsWith("QUIT")) {
                     return;
                 }
                 else if (command.startsWith("TURN")) {
-                    Server.whoseTurn= (Server.whoseTurn+1)%4;
+                    Server.whoseTurn= (Server.whoseTurn+1)%numberOfPlayers;
                     for (PrintWriter writer : Server.writers) {
                         writer.println("TURN "+ Server.whoseTurn);
                     }
