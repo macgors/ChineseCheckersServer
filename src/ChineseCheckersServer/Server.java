@@ -17,7 +17,7 @@ public class Server {
     boolean inPlay=false;
     int numOfPlayers;
     public static int whoseTurn=0;
-    int numOfPlayersConnected = 0;
+
     private ServerSocket listener;
     static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     Game game;
@@ -31,26 +31,15 @@ public class Server {
         System.out.println(numOfPlayers);
     }
 
-    private void setPlayers() throws IOException {
-        Game.players = new Player[numOfPlayers];
-        for (int i = 0; i < numOfPlayers; i++) {
-            System.out.println("waiting for " + i + " player");
-            Game.players[i] = new Player(listener.accept(),i, numOfPlayers);
-            numOfPlayersConnected++;
-        }
-        for (int i = 0; i < numOfPlayers; i++) {
-            Game.players[i].start();
-        }
-        System.out.println("All players connected.");
-    }
+
     private void start() throws IOException {
         listener = new ServerSocket(PORT);
         settings();
         try {
             while (true) {
                 Game game = new Game(numOfPlayers);
-                if (numOfPlayersConnected == 0) {
-                    setPlayers();
+                if (game.numOfPlayersConnected == 0) {
+                    game.setPlayers(listener);
                 }
             }
         }

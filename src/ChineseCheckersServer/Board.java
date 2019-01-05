@@ -344,7 +344,7 @@ public class Board{
         return false;
     }
 
-    public void winCondition(){
+    public Color winCondition(){
         Color winner=Color.GRAY;
         if(
                 Color.GREEN.equals(board[4][13].getFill()) &&
@@ -428,13 +428,21 @@ public class Board{
         )
             winner= Color.DARKMAGENTA;
 
-        if(!winner.equals(Color.GRAY)){
-            for (PrintWriter writer : Server.writers) {
-                writer.println("WINNER " + winner);
-            }
-        }
+        return winner;
     }
 
-
+    public void printDebug(){
+        for(int i=0;i<13;i++){
+            for(int j=0;j<17;j++){
+                if(board[i][j]!=null){
+                    if(Color.GRAY.equals(board[i][j].getFill())){
+                        System.out.print("G");
+                    }
+                    else System.out.print("X");
+                }
+            }
+            System.out.print("\n");
+        }
+    }
 
 }
