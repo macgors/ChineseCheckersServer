@@ -150,24 +150,27 @@ public class Human extends Player{
 
               for (int x = 0; x < 13; x++) {
                   for (int y = 0; y < 17; y++) {
-                      if (gameboard.board[x][y].getFill().equals(this.color)) {
-                          for (int i = 0; i < 13; i++) {
-                              for (int j = 0; j < 17; j++) {
-                                  if (gameboard.movePossible(i, j, x, y, this.color)) {
-                                      gameboard.move(i, j, x, y,this.color);
-                                      for (PrintWriter writer : Server.writers) {
-                                          writer.println("MOVE "+ i + " " + j + " " + x+ " " + y);
-                                      }
+                      if (gameboard.board[x][y] != null) {
+                          if (gameboard.board[x][y].getFill().equals(this.color)) {
+                              for (int i = 0; i < 13; i++) {
+                                  for (int j = 0; j < 17; j++) {
+                                          if (gameboard.board[i][j] != null) {
+                                          if (gameboard.movePossible(i, j, x, y, this.color)) {
+                                              gameboard.move(i, j, x, y, this.color);
+                                              for (PrintWriter writer : Server.writers) {
+                                                  writer.println("MOVE " + i + " " + j + " " + x + " " + y);
+                                              }
 
-                                      return;
-                                  }
-                                    else if (gameboard.jumpPossible(i, j, x, y)){
-                                      for (PrintWriter writer : Server.writers) {
-                                          writer.println("MOVE "+ i + " " + j + " " + x+ " " + y);
-                                      }
+                                              return;
+                                          } else if (gameboard.jumpPossible(i, j, x, y)) {
+                                              for (PrintWriter writer : Server.writers) {
+                                                  writer.println("MOVE " + i + " " + j + " " + x + " " + y);
+                                              }
 
-                                      gameboard.jump(i, j, x, y,this.color);
-                                      return;
+                                              gameboard.jump(i, j, x, y, this.color);
+                                              return;
+                                          }
+                                      }
                                   }
                               }
                           }
