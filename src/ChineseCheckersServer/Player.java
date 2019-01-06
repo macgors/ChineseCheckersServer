@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Player extends Thread {
     Color color;
-    Socket socket;
-    BufferedReader input;
-    PrintWriter output;
     int PlayerNumber;
     int numberOfPlayers;
+    public void makeMoves(){
+
+    }
 
     public void setColor(int a) {
         if (a == 0) this.color = Color.GREEN;

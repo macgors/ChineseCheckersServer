@@ -285,46 +285,51 @@ public class Board{
         */
 
 
-        if (goingFromX - hereGoX == 2)
-            if (goingFromY - hereGoY == 0)
-                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY].getFill())))
-                    return true;
+        if (Color.GRAY.equals(board[hereGoX][hereGoY].getFill())) {
 
-        if (goingFromX - hereGoX == -2)
-            if (goingFromY - hereGoY == 0)
-                if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY].getFill())))
-                    return true;
+            if (goingFromX - hereGoX == 2)
+                if (goingFromY - hereGoY == 0)
+                    if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY].getFill())))
+                        return true;
 
-        // (J) curvature of the board forces to make two checks
-        // cause could be placed on even or odd spot
+            if (goingFromX - hereGoX == -2)
+                if (goingFromY - hereGoY == 0)
+                    if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY].getFill())))
+                        return true;
 
-        if (hereGoX - goingFromX == -1)
-            if (hereGoY - goingFromY == 2)
-                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY - 1].getFill()))) {
-                    return true;
-                } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill())))
-                    return true;
+            // (J) curvature of the board forces to make two checks
+            // cause could be placed on even or odd spot
 
-        if (hereGoX - goingFromX == -1)
-            if (hereGoY - goingFromY == -2)
-                if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY + 1].getFill()))) {
-                    return true;
-                } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill())))
-                    return true;
+            if (hereGoX - goingFromX == -1)
+                if (hereGoY - goingFromY == 2)
+                    if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY - 1].getFill()))) {
+                        return true;
+                    } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill())))
+                        return true;
 
-        if (hereGoX - goingFromX == 1)
-            if (hereGoY - goingFromY == 2)
-                if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill()))) {
-                    return true;
-                } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY - 1].getFill())))
-                    return true;
+            if (hereGoX - goingFromX == -1)
+                if (hereGoY - goingFromY == -2)
+                    if (!(Color.GRAY.equals(board[hereGoX + 1][hereGoY + 1].getFill()))) {
+                        return true;
+                    } else if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill())))
+                        return true;
 
-        if (hereGoX - goingFromX == 1)
-            if (hereGoY - goingFromY == -2)
-                if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill()))) {
-                    return true;
-                } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY + 1].getFill())))
-                    return true;
+            if (hereGoX - goingFromX == 1)
+                if (hereGoY - goingFromY == 2) {
+                    if (!(Color.GRAY.equals(board[hereGoX][hereGoY - 1].getFill()))) {
+                        return true;
+                    } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY - 1].getFill()))) {
+                        return true;
+                    }
+                }
+
+            if (hereGoX - goingFromX == 1)
+                if (hereGoY - goingFromY == -2)
+                    if (!(Color.GRAY.equals(board[hereGoX][hereGoY + 1].getFill()))) {
+                        return true;
+                    } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY + 1].getFill())))
+                        return true;
+        }
 
         return false;
     }

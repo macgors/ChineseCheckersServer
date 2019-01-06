@@ -16,7 +16,9 @@ public class Server {
     private static final int PORT = 9001;
     boolean inPlay=false;
     int numOfPlayers;
-    public static int whoseTurn=0;
+    int numOfBots;
+    int numOfPlayersConnected;
+
 
     private ServerSocket listener;
     static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
@@ -29,6 +31,10 @@ public class Server {
         System.out.println("Number of players: ");
         numOfPlayers = scanner.nextInt();
         System.out.println(numOfPlayers);
+        System.out.println("Number of bots included: ");
+        numOfBots = scanner.nextInt();
+        System.out.println(numOfBots);
+
     }
 
 
@@ -37,8 +43,9 @@ public class Server {
         settings();
         try {
             while (true) {
-                Game game = new Game(numOfPlayers);
-                if (game.numOfPlayersConnected == 0) {
+                Game game = new Game(numOfPlayers,numOfBots);
+                if (numOfPlayersConnected == 0) {
+                    numOfPlayersConnected++;
                     game.setPlayers(listener);
                 }
             }
