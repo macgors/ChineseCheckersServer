@@ -107,7 +107,7 @@ public class Human extends Player{
                             writer.println("WINNER " + winner);
                         }
                     }
-                    gameboard.printDebug();
+
 
                 }
                 else if (command.startsWith("QUIT")) {
@@ -137,38 +137,38 @@ public class Human extends Player{
 }
 
     public class Bot extends Player{
-        private Board pawnsBoards[]=new Board[10];
+
           public Bot(int playerNumber, int NumberOfPlayers){
              this.PlayerNumber=playerNumber;
-             setColor(PlayerNumber);
+             setColor(playerNumber);
              this.numberOfPlayers=NumberOfPlayers;
-             for(int i=0;i<10;i++){
-                 pawnsBoards[i]=gameboard;
-             }
           }
           public void makeMoves() {
 
-              for (int x = 0; x < 13; x++) {
+              for (int x = 12; x >=0; x--) {
                   for (int y = 0; y < 17; y++) {
                       if (gameboard.board[x][y] != null) {
                           if (gameboard.board[x][y].getFill().equals(this.color)) {
                               for (int i = 0; i < 13; i++) {
                                   for (int j = 0; j < 17; j++) {
                                           if (gameboard.board[i][j] != null) {
-                                          if (gameboard.movePossible(i, j, x, y, this.color)) {
-                                              gameboard.move(i, j, x, y, this.color);
-                                              for (PrintWriter writer : Server.writers) {
-                                                  writer.println("MOVE " + i + " " + j + " " + x + " " + y);
-                                              }
-
-                                              return;
-                                          } else if (gameboard.jumpPossible(i, j, x, y)) {
-                                              for (PrintWriter writer : Server.writers) {
-                                                  writer.println("MOVE " + i + " " + j + " " + x + " " + y);
-                                              }
-
-                                              gameboard.jump(i, j, x, y, this.color);
-                                              return;
+                                            if (gameboard.jumpPossible(i, j, x, y)) {
+                                                Board copyBoard=gameboard;
+                                                copyBoard.jump(i, j, x, y, this.color);
+                                                if(true) {
+                                                    gameboard.jump(i, j, x, y, this.color);
+                                                    afterBotTurn(i, j, x, y);
+                                                    return;
+                                                    }
+                                                }
+                                            else if (gameboard.movePossible(i, j, x, y,this.color)) {
+                                                Board copyBoard=gameboard;
+                                                copyBoard.move(i, j, x, y, this.color);
+                                                if(true) {
+                                                    gameboard.move(i, j, x, y, this.color);
+                                                    afterBotTurn(i, j, x, y);
+                                                    return;
+                                                }
                                           }
                                       }
                                   }
@@ -180,9 +180,18 @@ public class Human extends Player{
           }
 
 
+            private void afterBotTurn(int i, int j,int x,int y){
+                whoseTurn= (whoseTurn+1)%numberOfPlayers;
+                for (PrintWriter writer : Server.writers) {
+                    writer.println("MOVE " + i + " " + j + " " + x + " " + y);
+                    writer.println("TURN "+ whoseTurn);
 
-          public int evaluate(Board BotBoard){
-              int evaluation=0;
+                }
+
+            }
+          public boolean evaluate(int i, int j, int x, int y){
+
+              boolean evaluation=false;
               int whereToWinX=-1;
               int whereToWinY=-1;
               if(this.color.equals(Color.RED)){
@@ -209,14 +218,10 @@ public class Human extends Player{
                   whereToWinY=4;
                   whereToWinX=0;
               }
-              for (int i=0;i<13;i++){
-                  for(int j=0;j<17;j++){
-                      if(BotBoard.board[i][j].getFill().equals(this.color)){
-                        evaluation+=Math.abs(whereToWinX-i);
-                        evaluation+=Math.abs(whereToWinY-j);
-                      }
-                  }
-              }
+              int FromDistance=Math.abs(x-whereToWinX)+Math.abs(y-whereToWinY);
+              int toDistance=Math.abs(i-whereToWinX)+Math.abs(j-whereToWinY);
+
+              if(toDistance<FromDistance) evaluation=true;
 
             return evaluation;
           }

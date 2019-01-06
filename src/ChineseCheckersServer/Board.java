@@ -330,7 +330,7 @@ public class Board{
                     } else if (!(Color.GRAY.equals(board[hereGoX - 1][hereGoY + 1].getFill())))
                         return true;
         }
-
+        System.out.println("illegal jump checked");
         return false;
     }
 
